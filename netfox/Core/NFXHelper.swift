@@ -13,20 +13,18 @@ import UIKit
 #endif
 
 public enum HTTPModelShortType: String, CaseIterable {
-    case JSON = "JSON"
-    case XML = "XML"
-    case HTML = "HTML"
+    case JSON
+    case XML
+    case HTML
     case IMAGE = "Image"
     case OTHER = "Other"
 }
 
-
 public extension HTTPModelShortType {
-    
     init(contentType: String) {
         if NSPredicate(format: "SELF MATCHES %@", "^application/(vnd\\.(.*)\\+)?json$").evaluate(with: contentType) {
             self = .JSON
-        } else if (contentType == "application/xml") || (contentType == "text/xml")  {
+        } else if (contentType == "application/xml") || (contentType == "text/xml") {
             self = .XML
         } else if contentType == "text/html" {
             self = .HTML
@@ -38,7 +36,6 @@ public extension HTTPModelShortType {
     }
 }
 
-
 extension NFXColor {
     convenience init(red: Int, green: Int, blue: Int) {
         assert(red >= 0 && red <= 255, "Invalid red component")
@@ -49,51 +46,51 @@ extension NFXColor {
     }
     
     convenience init(netHex: Int) {
-        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
+        self.init(red: (netHex >> 16) & 0xff, green: (netHex >> 8) & 0xff, blue: netHex & 0xff)
     }
     
     class func NFXOrangeColor() -> NFXColor {
-        return NFXColor.init(netHex: 0xec5e28)
+        return NFXColor(netHex: 0xec5e28)
     }
     
     class func NFXGreenColor() -> NFXColor {
-        return NFXColor.init(netHex: 0x38bb93)
+        return NFXColor(netHex: 0x38bb93)
     }
     
     class func NFXDarkGreenColor() -> NFXColor {
-        return NFXColor.init(netHex: 0x2d7c6e)
+        return NFXColor(netHex: 0x2d7c6e)
     }
     
     class func NFXRedColor() -> NFXColor {
-        return NFXColor.init(netHex: 0xd34a33)
+        return NFXColor(netHex: 0xd34a33)
     }
     
     class func NFXDarkRedColor() -> NFXColor {
-        return NFXColor.init(netHex: 0x643026)
+        return NFXColor(netHex: 0x643026)
     }
     
     class func NFXStarkWhiteColor() -> NFXColor {
-        return NFXColor.init(netHex: 0xccc5b9)
+        return NFXColor(netHex: 0xccc5b9)
     }
     
     class func NFXDarkStarkWhiteColor() -> NFXColor {
-        return NFXColor.init(netHex: 0x9b958d)
+        return NFXColor(netHex: 0x9b958d)
     }
     
     class func NFXLightGrayColor() -> NFXColor {
-        return NFXColor.init(netHex: 0x9b9b9b)
+        return NFXColor(netHex: 0x9b9b9b)
     }
     
     class func NFXGray44Color() -> NFXColor {
-        return NFXColor.init(netHex: 0x707070)
+        return NFXColor(netHex: 0x707070)
     }
     
     class func NFXGray95Color() -> NFXColor {
-        return NFXColor.init(netHex: 0xf2f2f2)
+        return NFXColor(netHex: 0xf2f2f2)
     }
     
     class func NFXBlackColor() -> NFXColor {
-        return NFXColor.init(netHex: 0x231f20)
+        return NFXColor(netHex: 0x231f20)
     }
 }
 
@@ -120,22 +117,22 @@ extension NFXFont {
 
 extension URLRequest {
     func getNFXURL() -> String {
-        if (url != nil) {
-            return url!.absoluteString;
+        if url != nil {
+            return url!.absoluteString
         } else {
             return "-"
         }
     }
     
     func getNFXURLComponents() -> URLComponents? {
-        guard let url = self.url else {
+        guard let url = url else {
             return nil
         }
         return URLComponents(string: url.absoluteString)
     }
     
     func getNFXMethod() -> String {
-        if (httpMethod != nil) {
+        if httpMethod != nil {
             return httpMethod!
         } else {
             return "-"
@@ -204,7 +201,7 @@ extension URLResponse {
 
 extension NFXImage {
     class func NFXSettings() -> NFXImage {
-        #if os (iOS)
+        #if os(iOS)
         return UIImage(data: NFXAssets.getImage(NFXAssetName.settings), scale: 1.7)!
         #elseif os(OSX)
         return NSImage(data: NFXAssets.getImage(NFXAssetName.settings))!
@@ -212,7 +209,7 @@ extension NFXImage {
     }
 
     class func NFXClose() -> NFXImage {
-        #if os (iOS)
+        #if os(iOS)
         return UIImage(data: NFXAssets.getImage(NFXAssetName.close), scale: 1.7)!
         #elseif os(OSX)
         return NSImage(data: NFXAssets.getImage(NFXAssetName.close))!
@@ -220,7 +217,7 @@ extension NFXImage {
     }
     
     class func NFXInfo() -> NFXImage {
-        #if os (iOS)
+        #if os(iOS)
         return UIImage(data: NFXAssets.getImage(NFXAssetName.info), scale: 1.7)!
         #elseif os(OSX)
         return NSImage(data: NFXAssets.getImage(NFXAssetName.info))!
@@ -228,7 +225,7 @@ extension NFXImage {
     }
     
     class func NFXStatistics() -> NFXImage {
-        #if os (iOS)
+        #if os(iOS)
         return UIImage(data: NFXAssets.getImage(NFXAssetName.statistics), scale: 1.7)!
         #elseif os(OSX)
         return NSImage(data: NFXAssets.getImage(NFXAssetName.statistics))!
@@ -237,24 +234,24 @@ extension NFXImage {
 }
 
 extension InputStream {
-  func readfully() -> Data {
-    var result = Data()
-    var buffer = [UInt8](repeating: 0, count: 4096)
+    func readfully() -> Data {
+        var result = Data()
+        var buffer = [UInt8](repeating: 0, count: 4096)
     
-    open()
+        open()
     
-    var amount = 0
-    repeat {
-      amount = read(&buffer, maxLength: buffer.count)
-      if amount > 0 {
-        result.append(buffer, count: amount)
-      }
-    } while amount > 0
+        var amount = 0
+        repeat {
+            amount = read(&buffer, maxLength: buffer.count)
+            if amount > 0 {
+                result.append(buffer, count: amount)
+            }
+        } while amount > 0
     
-    close()
+        close()
     
-    return result
-  }
+        return result
+    }
 }
 
 extension Date {
@@ -264,7 +261,6 @@ extension Date {
 }
 
 class NFXDebugInfo {
-    
     class func getNFXAppName() -> String {
         return Bundle.main.infoDictionary?["CFBundleName"] as? String ?? ""
     }
@@ -291,7 +287,7 @@ class NFXDebugInfo {
     
     class func getNFXDeviceType() -> String {
         #if os(iOS)
-        return UIDevice.getNFXDeviceType() 
+        return UIDevice.getNFXDeviceType()
         #elseif os(OSX)
         return "Not implemented yet. PR welcomes"
         #endif
@@ -309,13 +305,13 @@ class NFXDebugInfo {
         #endif
     }
     
-    class func getNFXIP(_ completion:@escaping (_ result: String) -> Void) {
+    class func getNFXIP(_ completion: @escaping (_ result: String) -> Void) {
         var req: NSMutableURLRequest
         req = NSMutableURLRequest(url: URL(string: "https://api.ipify.org/?format=json")!)
         URLProtocol.setProperty(true, forKey: NFXProtocol.nfxInternalKey, in: req)
         
         let session = URLSession.shared
-        session.dataTask(with: req as URLRequest, completionHandler: { (data, response, error) in
+        session.dataTask(with: req as URLRequest, completionHandler: { data, _, _ in
             do {
                 let rawJsonData = try JSONSerialization.jsonObject(with: data!, options: [.allowFragments])
                 if let ipAddress = (rawJsonData as AnyObject).value(forKey: "ip") {
@@ -327,14 +323,11 @@ class NFXDebugInfo {
                 completion("-")
             }
             
-        }) .resume()
+        }).resume()
     }
-    
 }
 
-
-struct NFXPath {
-    
+enum NFXPath {
     static let sessionLogName = "session.log"
     static let tmpDirURL = URL(fileURLWithPath: NSTemporaryDirectory())
     static let nfxDirURL = tmpDirURL.appendingPathComponent("NFX", isDirectory: true)
@@ -343,8 +336,8 @@ struct NFXPath {
     static func createNFXDirIfNotExist() {
         do {
             try FileManager.default.createDirectory(at: nfxDirURL, withIntermediateDirectories: true, attributes: nil)
-        } catch let error {
-            print("[NFX]: failed to create working dir - \(error.localizedDescription)")
+        } catch {
+            nfxPrint("[NFX]: failed to create working dir - \(error.localizedDescription)")
         }
     }
     
@@ -353,8 +346,8 @@ struct NFXPath {
         
         do {
             try FileManager.default.removeItem(at: nfxDirURL)
-        } catch let error {
-            print("[NFX]: failed to delete working dir - \(error.localizedDescription)")
+        } catch {
+            nfxPrint("[NFX]: failed to delete working dir - \(error.localizedDescription)")
         }
     }
     
@@ -375,12 +368,9 @@ struct NFXPath {
     static func pathURLToFile(_ fileName: String) -> URL {
         return nfxDirURL.appendingPathComponent(fileName)
     }
-     
 }
 
-
 extension String {
-    
     func appendToFileURL(_ fileURL: URL) {
         guard let fileHandle = try? FileHandle(forWritingTo: fileURL) else {
             write(to: fileURL)
@@ -393,8 +383,8 @@ extension String {
             do {
                 try fileHandle.seekToEnd()
                 try fileHandle.write(contentsOf: data)
-            } catch let error {
-                print("[NFX]: Failed to append [\(self.prefix(128))] to \(fileURL), trying to create new file - \(error.localizedDescription)")
+            } catch {
+                nfxPrint("[NFX]: Failed to append [\(self.prefix(128))] to \(fileURL), trying to create new file - \(error.localizedDescription)")
                 write(to: fileURL)
             }
         } else {
@@ -407,11 +397,10 @@ extension String {
     private func write(to fileURL: URL) {
         do {
             try write(to: fileURL, atomically: true, encoding: .utf8)
-        } catch let error {
-            print("[NFX]: Failed to save [\(self.prefix(128))] to \(fileURL) - \(error.localizedDescription)")
+        } catch {
+            nfxPrint("[NFX]: Failed to save [\(prefix(128))] to \(fileURL) - \(error.localizedDescription)")
         }
     }
-    
 }
 
 @objc extension URLSessionConfiguration {
@@ -491,25 +480,21 @@ extension String {
     }
     
     @objc private class var default_swizzled: URLSessionConfiguration {
-        get {
-            let config = URLSessionConfiguration.default_swizzled
+        let config = URLSessionConfiguration.default_swizzled
             
-            // Let's go ahead and add in NFXProtocol, since it's safe to do so.
-            config.protocolClasses?.insert(NFXProtocol.self, at: 0)
+        // Let's go ahead and add in NFXProtocol, since it's safe to do so.
+        config.protocolClasses?.insert(NFXProtocol.self, at: 0)
             
-            return config
-        }
+        return config
     }
     
     @objc private class var ephemeral_swizzled: URLSessionConfiguration {
-        get {
-            let config = URLSessionConfiguration.ephemeral_swizzled
+        let config = URLSessionConfiguration.ephemeral_swizzled
             
-            // Let's go ahead and add in NFXProtocol, since it's safe to do so.
-            config.protocolClasses?.insert(NFXProtocol.self, at: 0)
+        // Let's go ahead and add in NFXProtocol, since it's safe to do so.
+        config.protocolClasses?.insert(NFXProtocol.self, at: 0)
             
-            return config
-        }
+        return config
     }
 }
 
@@ -542,16 +527,14 @@ private extension UIScene.ActivationState {
 }
 #endif
 
-
 class Publisher<T> {
-    
     private var subscriptions = Set<Subscription<T>>()
     
     var hasSubscribers: Bool { subscriptions.isEmpty == false }
     
-    init() where T == Void { }
+    init() where T == Void {}
     
-    init() { }
+    init() {}
     
     func subscribe(_ subscription: Subscription<T>) {
         subscriptions.insert(subscription)
@@ -588,11 +571,9 @@ class Publisher<T> {
     func callAsFunction() where T == Void {
         trigger(())
     }
-    
 }
 
 class Subscription<T>: Equatable, Hashable {
-    
     let id = UUID()
     private(set) var isCancelled = false
     fileprivate let callback: (T) -> Void
@@ -612,5 +593,4 @@ class Subscription<T>: Equatable, Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
 }
